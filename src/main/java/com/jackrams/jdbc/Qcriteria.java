@@ -1,7 +1,5 @@
 package com.jackrams.jdbc;
 
-import java.util.List;
-
 public class Qcriteria {
 
    private String colName;
@@ -12,28 +10,21 @@ public class Qcriteria {
         return queryType;
     }
 
-    public void setQueryType(QueryType queryType) {
-        this.queryType = queryType;
-    }
+
 
     public String getColName() {
         return colName;
     }
 
-    public void setColName(String colName) {
-        this.colName = colName;
-    }
+
 
     public Object getQueryValue() {
         return queryValue;
     }
 
-    public void setQueryValue(Object queryValue) {
-        this.queryValue = queryValue;
-    }
 
-    private Qcriteria(){
-    }
+
+
 
     private Qcriteria(String colName,QueryType queryType,Object queryValue){
         super();
@@ -59,4 +50,6 @@ public class Qcriteria {
                 &&this.getQueryValue().equals(qcriteria.queryValue)
                 ;
     }
+
+
 }
