@@ -38,4 +38,22 @@ public final class SelectExample extends Example{
     public Integer getPage() {
         return page;
     }
+
+    public List<String> getAscProperties() {
+        return ascProperties;
+    }
+
+    public List<String> getDescProperties() {
+        return descProperties;
+    }
+
+    public SelectExample addAsc(String proterty){
+        this.ascProperties.add(proterty);
+        return this;
+    }
+
+    public SelectExample addDesc(String proterty){
+        this.descProperties.add(proterty);
+        return this;
+    }
 }

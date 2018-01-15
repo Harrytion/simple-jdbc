@@ -1,11 +1,11 @@
 package com.jackrams.scanner;
 
-import com.alibaba.druid.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import com.jackrams.domain.EntityClass;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.lang.annotation.Annotation;
+
 import java.util.ArrayList;
 import java.util.List;
 
