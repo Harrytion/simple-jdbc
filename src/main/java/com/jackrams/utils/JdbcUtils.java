@@ -4,6 +4,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 public class JdbcUtils {
     private static DataSource dataSource;
@@ -23,8 +25,16 @@ public class JdbcUtils {
         JdbcUtils.dataSource = dataSource;
     }
 
+    /**
+     * 加载DataSource
+     */
     static{
+        ServiceLoader<DataSourceLoader> dataSourceLoaders=ServiceLoader.load(DataSourceLoader.class);
+        Iterator<DataSourceLoader> iterator = dataSourceLoaders.iterator();
 
+        if(iterator.hasNext()){
+            iterator.next().setDataSource();
+        }
 
     }
 

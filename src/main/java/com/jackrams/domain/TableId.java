@@ -1,4 +1,4 @@
-package com.jackrams.jdbc;
+package com.jackrams.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;

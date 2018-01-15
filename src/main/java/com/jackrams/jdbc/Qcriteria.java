@@ -1,5 +1,13 @@
 package com.jackrams.jdbc;
 
+import com.jackrams.excepts.BuilderException;
+
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Qcriteria {
 
    private String colName;
@@ -51,5 +59,39 @@ public class Qcriteria {
                 ;
     }
 
+    public static String getQcriteriaString(Qcriteria qcriteria){
+        StringBuilder qb=new StringBuilder();
+        qb.append(qcriteria.getColName());
+        if(qcriteria.queryType==QueryType.EQUALS){
+            qb.append(" = ");
+        }else if(qcriteria.getQueryType()==QueryType.IN){
+            qb.append( "in (");
+            int size=0;
+            if(qcriteria.queryValue instanceof Collection){
+                Collection<? extends Object> objects=(Collection<? extends Object>) qcriteria.getQueryValue();
+                size=objects.size();
+            }else if(qcriteria.getQueryValue() instanceof Object[]){
+                    Object[] objects=(Object[]) qcriteria.getQueryValue();
+                    size=objects.length;
+            }else{
+                throw new BuilderException("Can not find the Iterable Object Value ");
+            }
+
+            for (int i = 0; i <size ; i++) {
+                if(i==size-1){
+                    qb.append("?)");
+                }else{
+                    qb.append("?,");
+                }
+            }
+        }
+
+
+
+        return qb.toString();
+
+
+
+    }
 
 }

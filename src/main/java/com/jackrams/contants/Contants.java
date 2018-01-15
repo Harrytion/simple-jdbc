@@ -6,7 +6,10 @@ package com.jackrams.contants;
  */
 
 
-public class Contants {
+public interface Contants {
+    //Default Jdbc Type is Mysql, And Only Support Mysql Now
+    String defaultJdbcType="mysql";
+
 
 
 }
