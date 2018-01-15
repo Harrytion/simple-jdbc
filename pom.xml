@@ -6,7 +6,11 @@
 
     <groupId>com.jackrams</groupId>
     <artifactId>simple-jdbc</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>jdbc-core</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -20,11 +24,20 @@
             <version>1.0.2</version>
         </dependency>
 
+        <!-- Junit Test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.45</version>
+            <scope>provided</scope>
         </dependency>
 
 
