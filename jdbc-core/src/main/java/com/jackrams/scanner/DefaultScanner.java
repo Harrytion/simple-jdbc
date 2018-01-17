@@ -9,6 +9,10 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
+
 public class DefaultScanner implements Scanner {
     private List<Class> classList=new ArrayList<>();
 
@@ -40,7 +44,10 @@ public class DefaultScanner implements Scanner {
             if(clazz.isAnnotationPresent(Table.class)){
                 entityClass.setClassName(clazz.getName());
                 Table table =(Table) clazz.getAnnotation(Table.class);
-                if(StringUtils.isEmpty(table.name())) {}
+                if(StringUtils.isEmpty(table.name())) {
+                    String simpleName = clazz.getSimpleName();
+
+                }
                 entityClass.setTableName(table.name());
                 entityClass.setCatalog(table.catalog());
                 entityClass.setSchema(table.schema());
@@ -54,4 +61,6 @@ public class DefaultScanner implements Scanner {
     public void doScanColumn(){
 
     }
+
+
 }

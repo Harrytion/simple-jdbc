@@ -8,6 +8,8 @@ public final class SelectExample extends Example{
 
     private Integer pageSize;
 
+    private List<String> orderByProperties;
+
     private List<String> ascProperties;
 
     private List<String> descProperties;
@@ -21,10 +23,11 @@ public final class SelectExample extends Example{
         return this;
     }
 
-    public SelectExample(){
+    protected SelectExample(){
         super();
         ascProperties=new ArrayList<>(2);
         descProperties=new ArrayList<>(2);
+        orderByProperties=new ArrayList<>(4);
     }
 
     public static SelectExample custom(){
@@ -48,12 +51,18 @@ public final class SelectExample extends Example{
     }
 
     public SelectExample addAsc(String proterty){
+        this.orderByProperties.add(proterty);
         this.ascProperties.add(proterty);
         return this;
     }
 
     public SelectExample addDesc(String proterty){
+        this.orderByProperties.add(proterty);
         this.descProperties.add(proterty);
         return this;
+    }
+
+    public List<String> getOrderByProperties() {
+        return orderByProperties;
     }
 }
