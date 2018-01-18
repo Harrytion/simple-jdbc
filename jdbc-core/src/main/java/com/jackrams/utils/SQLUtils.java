@@ -219,18 +219,8 @@ public abstract class SQLUtils {
 
 
     public static List<SQLObject> getSQLObjectListFromSelectExample(SelectExample example){
-        List<SQLObject> sqlObjects=new ArrayList<>();
-        ConcurrentMap<String, List<Object>> sqlStringObjectMapFromSelectExample = getSQLStringObjectMapFromSelectExample(example);
-        if(!sqlStringObjectMapFromSelectExample.isEmpty()){
-            Set<Map.Entry<String, List<Object>>> entries = sqlStringObjectMapFromSelectExample.entrySet();
-            for (Map.Entry<String,List<Object>> entry :entries){
-                SQLObject sqlObject=new SQLObject();
-                sqlObject.setSql(entry.getKey());
-                sqlObject.setObjects(entry.getValue());
-                sqlObjects.add(sqlObject);
-            }
-        }
-        return sqlObjects;
+
+        return getSQLObjectListFromExample(example);
 
     }
 

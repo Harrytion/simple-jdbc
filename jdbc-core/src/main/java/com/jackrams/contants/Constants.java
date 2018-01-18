@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 
 
-public interface Contants {
+public interface Constants {
     //Default Jdbc Type is Mysql, And Only Support Mysql Now
     String defaultJdbcType="mysql";
     //

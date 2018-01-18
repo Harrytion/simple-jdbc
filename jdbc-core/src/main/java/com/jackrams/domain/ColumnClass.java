@@ -1,18 +1,32 @@
 package com.jackrams.domain;
 
+import javax.persistence.TemporalType;
+
 public final class ColumnClass {
 
+    private String fieldName;
     private String name;
-    private boolean unique;
-    private boolean nullable;
-    private boolean insertable;
-    private boolean updatable;
+    private Boolean unique;
+    private Boolean nullable;
+    private Boolean insertable;
+    private Boolean updatable;
     private String columnDefinition;
     private String table;
     private Integer length;
     private Integer precision;
     private Integer scale;
-    private boolean idable;
+    private Boolean idable;
+
+    private TemporalType temporalType;
+
+
+    public TemporalType getTemporalType() {
+        return temporalType;
+    }
+
+    public void setTemporalType(TemporalType temporalType) {
+        this.temporalType = temporalType;
+    }
 
     public String getName() {
         return name;
@@ -22,35 +36,39 @@ public final class ColumnClass {
         this.name = name;
     }
 
-    public boolean isUnique() {
+    public Boolean isUnique() {
         return unique;
     }
 
-    public void setUnique(boolean unique) {
+    public void setUnique(Boolean unique) {
         this.unique = unique;
     }
 
-    public boolean isNullable() {
+    public Boolean isNullable() {
         return nullable;
     }
 
-    public void setNullable(boolean nullable) {
+    public void setNullable(Boolean nullable) {
         this.nullable = nullable;
     }
 
-    public boolean isInsertable() {
+    public Boolean isInsertable() {
         return insertable;
     }
 
-    public void setInsertable(boolean insertable) {
+    public Boolean getInsertable() {
+        return insertable;
+    }
+
+    public void setInsertable(Boolean insertable) {
         this.insertable = insertable;
     }
 
-    public boolean isUpdatable() {
+    public Boolean isUpdatable() {
         return updatable;
     }
 
-    public void setUpdatable(boolean updatable) {
+    public void setUpdatable(Boolean updatable) {
         this.updatable = updatable;
     }
 
@@ -94,11 +112,22 @@ public final class ColumnClass {
         this.scale = scale;
     }
 
-    public boolean isIdable() {
+    public Boolean isIdable() {
         return idable;
     }
 
-    public void setIdable(boolean idable) {
+    public void setIdable(Boolean idable) {
+
+
         this.idable = idable;
+    }
+
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 }
