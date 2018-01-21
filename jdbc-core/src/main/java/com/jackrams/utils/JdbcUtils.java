@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
 public class JdbcUtils {
@@ -47,6 +48,16 @@ public class JdbcUtils {
     public static PreparedStatement getPreparedStatement(String str) throws SQLException{
 
         return dataSource.getConnection().prepareStatement(str);
+    }
+
+
+    public static Integer excuteUpdate(String sql, List<Object> objects) throws SQLException{
+        PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sql);
+        int index=1;
+        for (Object obj : objects){
+            preparedStatement.setObject(index++,obj);
+        }
+        return preparedStatement.executeUpdate();
     }
 
 

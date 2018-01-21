@@ -4,10 +4,11 @@ import com.jackrams.domain.Example;
 import com.jackrams.domain.Page;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
 
-public interface BaseDao<T,Id extends Serializable> {
+public interface BaseDao<T,Id extends Object> {
 
     /**
      *
@@ -145,7 +146,7 @@ public interface BaseDao<T,Id extends Serializable> {
 
 
 
-
+    Connection getConnection();
 
 
 

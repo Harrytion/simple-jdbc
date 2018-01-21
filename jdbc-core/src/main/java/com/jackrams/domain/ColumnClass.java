@@ -1,5 +1,6 @@
 package com.jackrams.domain;
 
+import javax.persistence.Column;
 import javax.persistence.TemporalType;
 
 public final class ColumnClass {
