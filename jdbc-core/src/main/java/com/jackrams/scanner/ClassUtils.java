@@ -27,7 +27,7 @@ public class ClassUtils {
 	 * 
 	 * @param packageName
 	 */
-	private static void ckeckNullPackageName(String packageName) {
+	private static void checkNullPackageName(String packageName) {
 		if (packageName == null || packageName.trim().length() == 0)
 			throw new NullPointerException(ERROR_MESSAGE);
 	}
@@ -51,7 +51,7 @@ public class ClassUtils {
 	 */
 	public static List<Class> scanPackage(String packageName,ClassFilter classFilter) {
 		//检测packageName 是否为空，如果为空就抛出NullPointException
-		ckeckNullPackageName(packageName);
+		checkNullPackageName(packageName);
 		//实例化一个篮子 P: 放置class
 		final List<Class> classes = new ArrayList<Class>();
 		// 遍历在classpath 下面的jar包，class文件夹(现在没有包括 java jre)
