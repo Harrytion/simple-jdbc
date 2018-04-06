@@ -10,11 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
-public class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,ObjectId> {
-
+public  abstract class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,ObjectId> {
+   final ConcurrentMap<Class<?>, EntityClass> entityClassMap = Constants.entityClassMap;
     @Override
     public Integer insert(T o) {
-        ConcurrentMap<Class<?>, EntityClass> entityClassMap = Constants.entityClassMap;
+
         EntityClass entityClass = entityClassMap.get(o.getClass());
 
         return null;
@@ -22,6 +22,17 @@ public class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,ObjectId> {
 
     @Override
     public Integer insertSelective(T o) {
+        return null;
+    }
+
+
+    @Override
+    public Integer insertList(Iterable<T> ts) {
+        return null;
+    }
+
+    @Override
+    public Integer insertListSelective(Iterable<T> ts) {
         return null;
     }
 

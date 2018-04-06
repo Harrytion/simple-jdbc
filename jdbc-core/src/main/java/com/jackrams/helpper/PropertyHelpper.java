@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-public class PropertyHelpper {
+public abstract class PropertyHelpper {
 
 
     private static final String SET_METHOD = "set[a-zA-Z0-9_]+";
     private static final String GET_METHOD = "get[a-zA-Z0-9_]+";
-    private static final String BOOL_METHOD= "is[a-zA-Z0-9_]+";
+    private static final String BOOL_GET_METHOD= "is[a-zA-Z0-9_]+";
 
 
     public static String getFieldNameByMethod(String methodName, List<String> fields) {
         String fieldName="";
-        if(methodName.matches(BOOL_METHOD)){
+        if(methodName.matches(BOOL_GET_METHOD)){
             fieldName=methodName.replaceFirst("is","");
         }
         if(methodName.matches(GET_METHOD)){
@@ -45,5 +45,8 @@ public class PropertyHelpper {
     }
 
 
+    private PropertyHelpper(){
+      //  throw new
+    }
 
 }

@@ -24,11 +24,21 @@ public interface BaseDao<T,Id extends Object> {
      * @param t insert Object with Flied Only has Value
      * @return
      *
-     * 直插入有值的字段
+     * 只插入有值的字段
      *
      */
 
     Integer insertSelective(T t);
+
+    /**
+     * 同时插入多条数据
+     * @param ts
+     * @return
+     */
+    Integer insertList(Iterable<T> ts);
+
+
+    Integer insertListSelective(Iterable<T> ts);
 
     /**
      *

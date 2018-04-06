@@ -1,14 +1,16 @@
 package com.jackrams.utils;
 
+import com.jackrams.domain.SQLObject;
+import com.jackrams.excepts.UtilsCannotInstanceException;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class JdbcUtils {
+public abstract class JdbcUtils {
     private static DataSource dataSource;
 
     public static DataSource getDataSource(){
@@ -60,5 +62,50 @@ public class JdbcUtils {
         return preparedStatement.executeUpdate();
     }
 
+    public static Integer excuteUpdate(SQLObject sqlObject) throws Exception{
+        return excuteUpdate(sqlObject.getSql(),sqlObject.getObjects());
+    }
 
+    public static Integer excuteBatchUpdate(List<SQLObject> sqlObjects) throws Exception{
+        Integer count=0;
+       final Map<String,PreparedStatement> preparedStatementMap =new HashMap<>(sqlObjects.size());
+        PreparedStatement firstPreparedStatement=null;
+        for (SQLObject sqlObject : sqlObjects){
+            if(null !=sqlObject.getSql()){
+                PreparedStatement preparedStatement = preparedStatementMap.get(sqlObject.getSql());
+                if(null==preparedStatement){
+                    preparedStatement=dataSource.getConnection().prepareStatement(sqlObject.getSql());
+                    firstPreparedStatement=preparedStatement;
+                    preparedStatementMap.put(sqlObject.getSql(),firstPreparedStatement);
+                }
+                List<Object> objects = sqlObject.getObjects();
+
+
+
+            }else {
+
+            }
+        }
+
+        for (String key : preparedStatementMap.keySet()){
+            int[] batch = preparedStatementMap.get(key).executeBatch();
+            count+=batchCount(batch);
+        }
+
+        return count;
+    }
+
+
+    private   JdbcUtils(){
+        throw new UtilsCannotInstanceException();
+    }
+
+    private static Integer batchCount(int [] batch){
+        AtomicInteger countAtomicInteger =new AtomicInteger();
+    //    Integer count=0;
+        for (Integer i :batch){
+            countAtomicInteger.addAndGet(i);
+        }
+        return countAtomicInteger.get();
+    }
 }
