@@ -1,9 +1,9 @@
 package com.jackrams.scanner;
 
-import com.jackrams.contants.Constants;
 import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
 import com.jackrams.helpper.PropertyHelpper;
+import com.jackrams.utils.EntityUtils;
 import com.jackrams.utils.SQLUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  *
@@ -48,11 +49,11 @@ public class DefaultScanner implements Scanner {
         doScanColumn();
 
 
-        log.debug("doScan End scan Entity size " + Constants.entityClassMap.keySet().size());
+        log.debug("doScan End scan Entity size " + EntityUtils.getEntityClassMap().keySet().size());
     }
 
 
-    public void doScanEntity() {
+    public synchronized void doScanEntity() {
         for (Class clazz : classList) {
             EntityClass entityClass = new EntityClass();
             entityClass.setClassName(clazz.getName());
@@ -74,15 +75,16 @@ public class DefaultScanner implements Scanner {
 
             }
             entityClassList.add(entityClass);
-            Constants.entityClassMap.putIfAbsent(clazz, entityClass);
+            EntityUtils.putIfAbsent(clazz, entityClass);
         }
     }
 
-    public void doScanColumn() {
-        if (Constants.entityClassMap.isEmpty()) return;
-        Set<Class<?>> classes = Constants.entityClassMap.keySet();
+    public synchronized void doScanColumn() {
+        if (EntityUtils.entityClassMapEmpty()) return;
+        ConcurrentMap<Class<?>, EntityClass> entityClassMap = EntityUtils.getEntityClassMap();
+        Set<Class<?>> classes = entityClassMap.keySet();
         for (Class clazz : classes) {
-            EntityClass entityClass = Constants.entityClassMap.get(clazz);
+            EntityClass entityClass = EntityUtils.getEntityClassMap().get(clazz);
             //List of Field
             Field[] declaredFields = clazz.getDeclaredFields();
             List<String> fieldNames = new ArrayList<>(declaredFields.length);
@@ -103,7 +105,11 @@ public class DefaultScanner implements Scanner {
             entityClass.setColumnClasses(merge);
             entityClass.setFliedColumnMap(getColumnClassMap(merge));
             entityClass.setIdFlied(getIdField(merge));
+            entityClassMap.putIfAbsent(clazz,entityClass);
+
         }
+
+        EntityUtils.putAll(entityClassMap);
     }
 
 

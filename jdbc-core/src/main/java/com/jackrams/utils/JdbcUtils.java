@@ -2,24 +2,20 @@ package com.jackrams.utils;
 
 import com.jackrams.domain.SQLObject;
 import com.jackrams.excepts.UtilsCannotInstanceException;
+import com.jackrams.helpper.CountHelper;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ServiceLoader;
 
 public abstract class JdbcUtils {
     private static DataSource dataSource;
 
-    public static DataSource getDataSource(){
-        if(dataSource==null){
-            throw new UtilsException("dataSource is Null");
-        }
-        return dataSource;
-
-    }
 
     public static void setDataSource(DataSource dataSource) {
         if(dataSource==null){
@@ -34,7 +30,6 @@ public abstract class JdbcUtils {
     static{
         ServiceLoader<DataSourceLoader> dataSourceLoaders=ServiceLoader.load(DataSourceLoader.class);
         Iterator<DataSourceLoader> iterator = dataSourceLoaders.iterator();
-
         if(iterator.hasNext()){
             iterator.next().setDataSource();
         }
@@ -66,33 +61,34 @@ public abstract class JdbcUtils {
         return excuteUpdate(sqlObject.getSql(),sqlObject.getObjects());
     }
 
-    public static Integer excuteBatchUpdate(List<SQLObject> sqlObjects) throws Exception{
-        Integer count=0;
-       final Map<String,PreparedStatement> preparedStatementMap =new HashMap<>(sqlObjects.size());
-        PreparedStatement firstPreparedStatement=null;
-        for (SQLObject sqlObject : sqlObjects){
-            if(null !=sqlObject.getSql()){
-                PreparedStatement preparedStatement = preparedStatementMap.get(sqlObject.getSql());
-                if(null==preparedStatement){
-                    preparedStatement=dataSource.getConnection().prepareStatement(sqlObject.getSql());
-                    firstPreparedStatement=preparedStatement;
-                    preparedStatementMap.put(sqlObject.getSql(),firstPreparedStatement);
-                }
-                List<Object> objects = sqlObject.getObjects();
-
-
-
-            }else {
-
+    public static Integer excuteBatchUpdate(SQLObject sqlObject) throws Exception{
+     //   Integer count=0;
+        CountHelper countHelper =new CountHelper();
+        PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
+        List<List<Object>> batchArgs = sqlObject.getBatchArgs();
+        for (List<Object> args : batchArgs){
+            int index=1;
+            for (Object arg : args){
+                preparedStatement.setObject(index++,arg);
             }
+            preparedStatement.addBatch();
         }
 
-        for (String key : preparedStatementMap.keySet()){
-            int[] batch = preparedStatementMap.get(key).executeBatch();
-            count+=batchCount(batch);
-        }
+        int[] batch = preparedStatement.executeBatch();
 
-        return count;
+        countHelper.addArrayCount(batch);
+        return countHelper.getCount();
+    }
+
+
+    public static ResultSet queryForRowSet(SQLObject sqlObject) throws Exception {
+        PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
+        List<Object> objects = sqlObject.getObjects();
+        int index = 1;
+        for(Object obj : objects){
+            preparedStatement.setObject(index++,obj);
+        }
+        return preparedStatement.executeQuery();
     }
 
 
@@ -100,12 +96,5 @@ public abstract class JdbcUtils {
         throw new UtilsCannotInstanceException();
     }
 
-    private static Integer batchCount(int [] batch){
-        AtomicInteger countAtomicInteger =new AtomicInteger();
-    //    Integer count=0;
-        for (Integer i :batch){
-            countAtomicInteger.addAndGet(i);
-        }
-        return countAtomicInteger.get();
-    }
+
 }

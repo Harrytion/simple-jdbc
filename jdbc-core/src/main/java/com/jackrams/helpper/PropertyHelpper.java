@@ -3,7 +3,9 @@ package com.jackrams.helpper;
 import com.jackrams.contants.Constants;
 import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
+import com.jackrams.excepts.UtilsCannotInstanceException;
 import com.jackrams.scanner.ScannerException;
+import com.jackrams.utils.EntityUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,7 @@ public abstract class PropertyHelpper {
 
 
     public static  String getPropertyByField(Class clzz,String field){
-        ConcurrentMap<Class<?>, EntityClass> entityClassMap = Constants.entityClassMap;
+        ConcurrentMap<Class<?>, EntityClass> entityClassMap = EntityUtils.getEntityClassMap();
         EntityClass entityClass = entityClassMap.get(clzz);
         Map<String, ColumnClass> fliedColumnMap = entityClass.getFliedColumnMap();
         ColumnClass columnClass = fliedColumnMap.get(field);
@@ -46,7 +48,7 @@ public abstract class PropertyHelpper {
 
 
     private PropertyHelpper(){
-      //  throw new
+        throw new UtilsCannotInstanceException();
     }
 
 }
