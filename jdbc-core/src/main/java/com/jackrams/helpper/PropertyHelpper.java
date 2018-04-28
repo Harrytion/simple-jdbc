@@ -1,10 +1,8 @@
 package com.jackrams.helpper;
 
-import com.jackrams.contants.Constants;
 import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
 import com.jackrams.excepts.UtilsCannotInstanceException;
-import com.jackrams.scanner.ScannerException;
 import com.jackrams.utils.EntityUtils;
 
 import java.util.List;
