@@ -1,30 +1,28 @@
 package com.jackrams;
 
 
-import com.jackrams.domain.ColumnClass;
-import com.jackrams.domain.EntityClass;
 import com.jackrams.domain.Example;
+import com.jackrams.domain.Id;
 import com.jackrams.domain.Page;
-import com.jackrams.contants.Constants;
-import com.jackrams.utils.EntityUtils;
+import com.jackrams.domain.SQLObject;
+import com.jackrams.sql.InsertBuilder;
+import com.jackrams.sql.InsertSeletiveBuilder;
+import com.jackrams.sql.SQLBuilder;
+import com.jackrams.utils.JdbcUtils;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
-public  abstract class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,ObjectId> {
-   final ConcurrentMap<Class<?>, EntityClass> entityClassMap = EntityUtils.getEntityClassMap();
+public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T,Id> {
     @Override
-    public Integer insert(T o) {
+    public Integer insert(T o) throws Exception{
         if(null!=o){
-            EntityClass entityClass = entityClassMap.get(o.getClass());
-            String tableName=entityClass.getTableName();
-            String catalog = entityClass.getCatalog();
-            String schema = entityClass.getSchema();
-            //List<String> idFlied = entityClass.getIdFlied();
-            Map<String, ColumnClass> fliedColumnMap = entityClass.getFliedColumnMap();
+            SQLBuilder sqlBuilder =new InsertBuilder(o);
+            SQLObject sqlObject = sqlBuilder.getSQLObject();
+         return JdbcUtils.excuteUpdate(sqlObject);
 
         }
 
@@ -33,20 +31,27 @@ public  abstract class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,Obje
     }
 
     @Override
-    public Integer insertSelective(T o) {
+    public Integer insertSelective(T o) throws Exception{
+
+        if(null !=o) return JdbcUtils.excuteUpdate(new InsertSeletiveBuilder(o).getSQLObject());
+
         return null;
     }
 
 
     @Override
     public Integer insertList(Iterable<T> ts) {
+        if(null != ts){
+            List<T> objectList =new ArrayList<>();
+            Iterator<T> iterator = ts.iterator();
+            while (iterator.hasNext()){
+                objectList.add(iterator.next());
+            }
+
+        }
         return null;
     }
 
-    @Override
-    public Integer insertListSelective(Iterable<T> ts) {
-        return null;
-    }
 
     @Override
     public Integer update(T o) {
@@ -69,32 +74,32 @@ public  abstract class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,Obje
     }
 
     @Override
-    public Integer delete(ObjectId t) {
+    public Integer delete(Id t) {
         return null;
     }
 
     @Override
-    public Integer deletes(Collection collection) {
+    public Integer deletes(Collection<Id> collection) {
         return null;
     }
 
     @Override
-    public Integer deletes(ObjectId[] serializables) {
+    public Integer deletes(Id[] serializables) {
         return null;
     }
 
     @Override
-    public T selectById(ObjectId serializable) {
+    public T selectById(Id serializable) {
         return null;
     }
 
     @Override
-    public List selectByIds(Collection collection) {
+    public List selectByIds(Collection<Id> collection) {
         return null;
     }
 
     @Override
-    public List selectByIds(ObjectId[] serializables) {
+    public List selectByIds(Id[] serializables) {
         return null;
     }
 
@@ -118,8 +123,13 @@ public  abstract class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,Obje
         return null;
     }
 
-    @Override
-    public Connection getConnection() {
-        return null;
+
+
+    private Class<? extends T> domainClass;
+
+    public AbstractBaseDaoImpl() {
+
+        domainClass = getDomainClass();
     }
+
 }

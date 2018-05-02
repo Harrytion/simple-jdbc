@@ -4,11 +4,10 @@ import com.jackrams.domain.Example;
 import com.jackrams.domain.Page;
 
 import java.io.Serializable;
-import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
 
-public interface BaseDao<T,Id extends Object> {
+public interface BaseDao<T,Id extends Serializable> {
 
     /**
      *
@@ -17,7 +16,7 @@ public interface BaseDao<T,Id extends Object> {
      *
      * 向数据库中插入所有字段
      */
-    Integer insert(T t);
+    Integer insert(T t)throws Exception;
 
     /**
      *
@@ -28,17 +27,17 @@ public interface BaseDao<T,Id extends Object> {
      *
      */
 
-    Integer insertSelective(T t);
+    Integer insertSelective(T t)throws Exception;
 
     /**
      * 同时插入多条数据
      * @param ts
      * @return
      */
-    Integer insertList(Iterable<T> ts);
+    Integer insertList(Iterable<T> ts)throws Exception;
 
 
-    Integer insertListSelective(Iterable<T> ts);
+    Integer insertListSelective(Iterable<T> ts)throws Exception;
 
     /**
      *
@@ -46,7 +45,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      * 更新所有字段
      */
-    Integer update(T t);
+    Integer update(T t)throws Exception;
 
     /**
      *
@@ -54,7 +53,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      * 更新有值字段
      */
-    Integer updateSelective(T t);
+    Integer updateSelective(T t)throws Exception;
 
     /**
      *
@@ -62,7 +61,7 @@ public interface BaseDao<T,Id extends Object> {
      * @param example the Example
      * @return
      */
-    Integer update(T newT, Example example);
+    Integer update(T newT, Example example)throws Exception;
 
 
     /**
@@ -71,28 +70,28 @@ public interface BaseDao<T,Id extends Object> {
      * @param
      * @return
      */
-    Integer updateSelective(T newT,Example example);
+    Integer updateSelective(T newT,Example example)throws Exception;
 
     /**
      *
      * @param t will delete Object Id
      * @return
      */
-    Integer delete(Id t);
+    Integer delete(Id t)throws Exception;
 
     /**
      *
      * @param ids will delete Object Of Ids
      * @return
      */
-    Integer deletes(Collection<Id> ids);
+    Integer deletes(Collection<Id> ids)throws Exception;
 
     /**
      *
      * @param ids
      * @return
      */
-    Integer deletes(Id ... ids);
+    Integer deletes(Id ... ids)throws Exception;
 
     /**
      * Query By Id
@@ -100,7 +99,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      * 通过Id获取T实例
      */
-    T selectById(Id id);
+    T selectById(Id id)throws Exception;
 
     /**
      *
@@ -109,7 +108,7 @@ public interface BaseDao<T,Id extends Object> {
      *
      *
      */
-    List<T> selectByIds(Collection<Id> ids);
+    List<T> selectByIds(Collection<Id> ids)throws Exception;
 
     /**
      *
@@ -117,7 +116,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      */
 
-    List<T> selectByIds(Id ... ids);
+    List<T> selectByIds(Id ... ids)throws Exception;
 
 
     /**
@@ -126,7 +125,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      */
 
-    Page<T> selectPageByExample(Example example);
+    Page<T> selectPageByExample(Example example)throws Exception;
 
     /**
      *
@@ -134,7 +133,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      */
 
-    List<T> selectListByExample(Example example);
+    List<T> selectListByExample(Example example)throws Exception;
 
     /**
      * 查询like 所有，以及查询逻辑为And
@@ -142,7 +141,7 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      */
 
-    List<T> selectListAllLikeAnd(T t);
+    List<T> selectListAllLikeAnd(T t)throws Exception;
 
     /**
      *
@@ -152,17 +151,9 @@ public interface BaseDao<T,Id extends Object> {
      * @return
      */
 
-    Page<T> selectPageAllLikeAnd(T t,int pageSize,int page);
+    Page<T> selectPageAllLikeAnd(T t,int pageSize,int page)throws Exception;
 
 
-
-    Connection getConnection();
-
-
-
-
-
-
-
+    Class<? extends T> getDomainClass();
 }
 

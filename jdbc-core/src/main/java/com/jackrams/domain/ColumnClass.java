@@ -1,10 +1,10 @@
 package com.jackrams.domain;
 
-import javax.persistence.Column;
 import javax.persistence.TemporalType;
+import java.lang.reflect.Field;
 
 public final class ColumnClass {
-
+    private Field columnField;
     private String fieldName;
     private String name;
     private Boolean unique;
@@ -130,5 +130,13 @@ public final class ColumnClass {
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
+    }
+
+    public Field getColumnField() {
+        return columnField;
+    }
+
+    public void setColumnField(Field columnField) {
+        this.columnField = columnField;
     }
 }

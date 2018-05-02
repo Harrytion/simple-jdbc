@@ -1,13 +1,13 @@
-package com.jackrams.helpper;
+package com.jackrams.sql;
 
 import com.jackrams.domain.SQLObject;
 
-public class UpdateStrategy extends AbstractStrategy  {
+public class UpdateBuilder extends AbstractBuilder  {
 
 
 
 
-    public UpdateStrategy(Object object){
+    public UpdateBuilder(Object object){
         super(object);
         buildSql();
     }

@@ -102,6 +102,15 @@ public class DefaultScanner implements Scanner {
             Map<String, ColumnClass> methodAnnos = methodAnnotantion(declaredMethods, fieldNames);
             List<ColumnClass> merge = mergeColumnMap(fieldAnnos, methodAnnos);
             merge.addAll(excludFieldAndMethodAnnotantion(declaredFields,merge));
+            for (ColumnClass columnClass : merge){
+                try {
+                    Field field = clazz.getDeclaredField(columnClass.getFieldName());
+                    field.setAccessible(true);
+                    columnClass.setColumnField(field);
+                }catch (Exception e){
+                    log.error("field Not Found ");
+                }
+            }
             entityClass.setColumnClasses(merge);
             entityClass.setFliedColumnMap(getColumnClassMap(merge));
             entityClass.setIdFlied(getIdField(merge));
@@ -155,6 +164,8 @@ public class DefaultScanner implements Scanner {
             Temporal temporal = field.getAnnotation(Temporal.class);
             columnClass.setTemporalType(temporal.value());
         }
+        field.setAccessible(true);
+        columnClass.setColumnField(field);
         if(field.isAnnotationPresent(Column.class)){
             Column column = field.getAnnotation(Column.class);
             columnClass=setColumnValue(columnClass,column);
@@ -272,4 +283,7 @@ public class DefaultScanner implements Scanner {
         }
         return idFields;
     }
+
+
+
 }
