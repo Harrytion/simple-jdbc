@@ -1,21 +1,33 @@
 package com.jackrams;
 
 
+import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
 import com.jackrams.domain.Example;
 import com.jackrams.domain.Page;
 import com.jackrams.contants.Constants;
+import com.jackrams.utils.EntityUtils;
+
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 public  abstract class AbstractBaseDaoImpl<T,ObjectId> implements BaseDao<T,ObjectId> {
-   final ConcurrentMap<Class<?>, EntityClass> entityClassMap = Constants.entityClassMap;
+   final ConcurrentMap<Class<?>, EntityClass> entityClassMap = EntityUtils.getEntityClassMap();
     @Override
     public Integer insert(T o) {
+        if(null!=o){
+            EntityClass entityClass = entityClassMap.get(o.getClass());
+            String tableName=entityClass.getTableName();
+            String catalog = entityClass.getCatalog();
+            String schema = entityClass.getSchema();
+            //List<String> idFlied = entityClass.getIdFlied();
+            Map<String, ColumnClass> fliedColumnMap = entityClass.getFliedColumnMap();
 
-        EntityClass entityClass = entityClassMap.get(o.getClass());
+        }
+
 
         return null;
     }
