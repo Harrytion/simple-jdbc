@@ -29,7 +29,7 @@ public abstract class PropertyHelpper {
             fieldName=methodName.replaceFirst("set","");
         }
         for(String listName : fields){
-            if(listName.equalsIgnoreCase(fieldName)) return fieldName;
+            if(listName.equalsIgnoreCase(fieldName)) return listName;
         }
         return  null;
     }

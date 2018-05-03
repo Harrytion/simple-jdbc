@@ -60,12 +60,6 @@ public class DefaultScanner implements Scanner {
             if (clazz.isAnnotationPresent(Table.class)) {
                 entityClass.setClassName(clazz.getName());
                 Table table = (Table) clazz.getAnnotation(Table.class);
-                if (StringUtils.isEmpty(table.name())) {
-                    String simpleName = clazz.getSimpleName();
-                    final String tableName = SQLUtils.camelhumpToUnderline(simpleName);
-                    entityClass.setSchema(table.schema());
-                    entityClass.setCatalog(table.catalog());
-                }
                 entityClass.setTableName(table.name());
                 entityClass.setCatalog(table.catalog());
                 entityClass.setSchema(table.schema());
@@ -93,6 +87,7 @@ public class DefaultScanner implements Scanner {
                 fieldNames.add(field.getName());
                 ColumnClass value = fieldAnnotantion(field);
                 if(null!=value){
+                    value.setFieldName(field.getName());
                     fieldAnnos.put(field.getName().toUpperCase(), value);
                 }
 
@@ -101,7 +96,7 @@ public class DefaultScanner implements Scanner {
             Method[] declaredMethods = clazz.getDeclaredMethods();
             Map<String, ColumnClass> methodAnnos = methodAnnotantion(declaredMethods, fieldNames);
             List<ColumnClass> merge = mergeColumnMap(fieldAnnos, methodAnnos);
-            merge.addAll(excludFieldAndMethodAnnotantion(declaredFields,merge));
+          //  merge.addAll(excludFieldAndMethodAnnotantion(declaredFields,merge));
             for (ColumnClass columnClass : merge){
                 try {
                     Field field = clazz.getDeclaredField(columnClass.getFieldName());
@@ -245,6 +240,8 @@ public class DefaultScanner implements Scanner {
                     columnClassList.add(fieldColumn);
 
                 }
+            }else{
+                columnClassList.add(fieldColumn);
             }
             methodAnnos.remove(fieldKey);
         }

@@ -4,7 +4,9 @@ package com.jackrams;
 import com.jackrams.domain.Example;
 import com.jackrams.domain.Page;
 import com.jackrams.domain.SQLObject;
+import com.jackrams.domain.SelectExample;
 import com.jackrams.excepts.OneIdGetManyObjectException;
+import com.jackrams.helpper.ExampleHelper;
 import com.jackrams.sql.*;
 import com.jackrams.utils.JdbcUtils;
 
@@ -24,7 +26,7 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
         }
 
 
-        return null;
+        return 0;
     }
 
     @Override
@@ -32,7 +34,7 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
 
         if(null !=o) return JdbcUtils.excuteUpdate(new InsertSeletiveBuilder(o,domainClass).getSQLObject());
 
-        return null;
+        return 0;
     }
 
 
@@ -45,7 +47,7 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
             if(count<0) count=Math.abs(count)/2;
             return count;
         }
-        return null;
+        return 0;
     }
 
 
@@ -117,34 +119,48 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public Page selectPageByExample(Example example,int pageSize, int page) throws Exception{
-
-
-        return null;
+    public Page<T> selectPageByExample(SelectExample example) throws Exception{
+        Page<T> page = new Page<>();
+        page.setData(selectListByExample(example));
+        page.setCount(getCount(example));
+        return page;
     }
 
     @Override
-    public List selectListByExample(Example example) throws  Exception{
-        return null;
+    public List<T> selectListByExample(SelectExample example) throws  Exception{
+        SelectByExampleBuilder<T> tSelectByExampleBuilder = new SelectByExampleBuilder<>(domainClass,example);
+        SQLObject sqlObject = tSelectByExampleBuilder.getSQLObject();
+        ResultSet resultSet = JdbcUtils.queryForRowSet(sqlObject);
+        List<T> tList = tSelectByExampleBuilder.parseObject(resultSet);
+        return tList;
     }
 
     @Override
-    public List selectListAllLikeAnd(T o) throws Exception {
-        return null;
+    public List<T> selectListAllLikeAnd(T o) throws Exception {
+        ExampleHelper<T> exampleHelper = new ExampleHelper<>(domainClass,o);
+        Example example = exampleHelper.buildAllLikeExample();
+        SelectByExampleBuilder<T> tSelectByExampleBuilder = new SelectByExampleBuilder<>(domainClass,example);
+        SQLObject sqlObject = tSelectByExampleBuilder.getSQLObject();
+        ResultSet resultSet = JdbcUtils.queryForRowSet(sqlObject);
+        List<T> tList = tSelectByExampleBuilder.parseObject(resultSet);
+        return tList;
     }
 
     @Override
-    public Page selectPageAllLikeAnd(T o, int pageSize, int page) throws Exception {
-        return null;
+    public Page<T> selectPageAllLikeAnd(T o, int pageSize, int page) throws Exception {
+        ExampleHelper<T> exampleHelper = new ExampleHelper<>(domainClass,o);
+        SelectExample example = exampleHelper.buildAllLikeSelectExample(page, pageSize);
+
+        return selectPageByExample(example);
     }
 
-    private int getCount(Example example){
-     return 0;
+    private long getCount(SelectExample example) throws Exception{
+        CountBuilder<T> tCountBuilder = new CountBuilder<>(domainClass,example);
+        SQLObject sqlObject = tCountBuilder.getSQLObject();
+        ResultSet resultSet = JdbcUtils.queryForRowSet(sqlObject);
+        return tCountBuilder.getCount(resultSet);
     }
 
-    private int getCount(T t){
-        return 0;
-    }
 
 
     private Class<T> domainClass;

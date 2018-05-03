@@ -2,7 +2,6 @@ package com.jackrams.sql;
 
 import com.jackrams.domain.ColumnClass;
 import com.jackrams.excepts.BuilderException;
-import javafx.util.Builder;
 
 import java.util.List;
 

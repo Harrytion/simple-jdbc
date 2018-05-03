@@ -109,12 +109,12 @@ public class Example{
         return this;
     }
 
-    public Example andLike(String property, String value) {
+    public Example andLike(String property, Object value) {
         this.criteria.criterions.add(new Criterion(property, value, "like", "and"));
         return this;
     }
 
-    public Example andNotLike(String property, String value) {
+    public Example andNotLike(String property, Object value) {
         this.criteria.criterions.add(new Criterion(property, value, "not like", "and"));
         return this;
     }

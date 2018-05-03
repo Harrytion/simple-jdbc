@@ -7,16 +7,16 @@ public final class ColumnClass {
     private Field columnField;
     private String fieldName;
     private String name;
-    private Boolean unique;
-    private Boolean nullable;
-    private Boolean insertable;
-    private Boolean updatable;
+    private boolean unique;
+    private boolean nullable;
+    private boolean insertable;
+    private boolean updatable;
     private String columnDefinition;
     private String table;
     private Integer length;
     private Integer precision;
     private Integer scale;
-    private Boolean idable;
+    private boolean idable;
 
     private TemporalType temporalType;
 
@@ -37,39 +37,39 @@ public final class ColumnClass {
         this.name = name;
     }
 
-    public Boolean isUnique() {
+    public boolean isUnique() {
         return unique;
     }
 
-    public void setUnique(Boolean unique) {
+    public void setUnique(boolean unique) {
         this.unique = unique;
     }
 
-    public Boolean isNullable() {
+    public boolean isNullable() {
         return nullable;
     }
 
-    public void setNullable(Boolean nullable) {
+    public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
 
-    public Boolean isInsertable() {
+    public boolean isInsertable() {
         return insertable;
     }
 
-    public Boolean getInsertable() {
+    public boolean getInsertable() {
         return insertable;
     }
 
-    public void setInsertable(Boolean insertable) {
+    public void setInsertable(boolean insertable) {
         this.insertable = insertable;
     }
 
-    public Boolean isUpdatable() {
+    public boolean isUpdatable() {
         return updatable;
     }
 
-    public void setUpdatable(Boolean updatable) {
+    public void setUpdatable(boolean updatable) {
         this.updatable = updatable;
     }
 
@@ -113,12 +113,11 @@ public final class ColumnClass {
         this.scale = scale;
     }
 
-    public Boolean isIdable() {
+    public boolean isIdable() {
         return idable;
     }
 
-    public void setIdable(Boolean idable) {
-
+    public void setIdable(boolean idable) {
 
         this.idable = idable;
     }

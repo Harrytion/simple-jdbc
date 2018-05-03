@@ -2,6 +2,7 @@ package com.jackrams;
 
 import com.jackrams.domain.Example;
 import com.jackrams.domain.Page;
+import com.jackrams.domain.SelectExample;
 
 import java.util.Collection;
 import java.util.List;
@@ -121,7 +122,7 @@ public interface BaseDao<T> {
      * @return
      */
 
-    Page<T> selectPageByExample(Example example,int pageSize, int page)throws Exception;
+    Page<T> selectPageByExample(SelectExample  example) throws Exception;
 
     /**
      *
@@ -129,7 +130,7 @@ public interface BaseDao<T> {
      * @return
      */
 
-    List<T> selectListByExample(Example example)throws Exception;
+    List<T> selectListByExample(SelectExample example) throws Exception;
 
     /**
      * 查询like 所有，以及查询逻辑为And

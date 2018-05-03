@@ -2,6 +2,7 @@ package com.jackrams.sql;
 
 import com.jackrams.domain.Example;
 import com.jackrams.domain.SQLObject;
+import com.jackrams.domain.SelectExample;
 import com.jackrams.utils.SQLUtils;
 
 public class SelectByExampleBuilder<T> extends AbstractSelectBuilder<T> {
@@ -15,7 +16,13 @@ public class SelectByExampleBuilder<T> extends AbstractSelectBuilder<T> {
     @Override
     protected void selectSql() throws Exception {
         buildedSelectSql=true;
-        SQLObject sqlObjectFromExample = SQLUtils.getSQLObjectFromExample(example);
+
+        SQLObject sqlObjectFromExample = null;
+        if(example instanceof SelectExample){
+            sqlObjectFromExample=SQLUtils.getSQLObjectFromSelectExample((SelectExample) example);
+        }else {
+            sqlObjectFromExample=SQLUtils.getSQLObjectFromExample(example);
+        }
         sqlBuilder.append(sqlObjectFromExample.getSql());
         sqlObjectArgs.addAll(sqlObjectFromExample.getObjects());
     }

@@ -13,6 +13,8 @@ public interface SQLBuilder {
     String WHERE  = " WHERE ";
     String _AND = " AND ";
     String _EQ  = "=" ;
+    String SELECT_COUNT = " COUNT(1) AS _COUNT ";
+    String _COUNT = "_COUNT";
     String _IN  = " IN " ;
     String _OR  = " OR ";
     String _FROM = " FROM ";
