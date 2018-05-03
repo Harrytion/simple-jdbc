@@ -2,6 +2,7 @@ package com.jackrams;
 
 import com.jackrams.helpper.CountHelper;
 import com.jackrams.utils.JdbcUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,8 @@ public class PrepareStatmentTest {
     @Test
     public void testInsertBatch() throws Exception{
         int i=0;
-
+        Connection connection = getConnection();
+        connection.setAutoCommit(false);
         PreparedStatement preparedStatement = init("insert into test(t_id,t_name,p_des) values(?,?,?)");
         while(true){
             if(i==1000000) break;
@@ -29,6 +31,8 @@ public class PrepareStatmentTest {
             i++;
         }
         int[] ints = preparedStatement.executeBatch();
+        connection.commit();
+        connection.setAutoCommit(true);
         CountHelper countHelper =new CountHelper();
         countHelper.addArrayCount(ints);
         Integer count = countHelper.getCount();
@@ -46,5 +50,12 @@ public class PrepareStatmentTest {
 
     Connection getConnection() throws Exception{
         return JdbcUtils.getConnection();
+    }
+
+    @Test
+    public void testStringBuilder(){
+        StringBuilder sb =new StringBuilder("abcd");
+        sb=sb.deleteCharAt(sb.length()-1);
+        Assert.assertEquals(sb.toString(),"abc");
     }
 }

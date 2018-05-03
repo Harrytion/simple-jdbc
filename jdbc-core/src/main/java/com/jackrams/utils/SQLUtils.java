@@ -94,7 +94,7 @@ public abstract class SQLUtils {
             final List<Example.Criteria> criteriaList = example.getCriteriaList();
             for (Example.Criteria criteria : criteriaList){
                 if(null==criteria.getAndOr()||StringUtils.isEmpty(criteria.getAndOr())){
-                    sqlBuilder.append(" where (");
+                    sqlBuilder.append(" WHERE (");
                 }else{
                     sqlBuilder.append(" ").append(criteria.getAndOr())
                             .append(" (");

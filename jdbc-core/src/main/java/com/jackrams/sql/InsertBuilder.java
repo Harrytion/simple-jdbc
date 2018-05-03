@@ -7,14 +7,14 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 
-public class InsertBuilder extends AbstractBuilder{
+public class InsertBuilder<T> extends AbstractBuilder{
 
     private transient Log log = LogFactory.getLog(InsertBuilder.class);
 
 
     @Override
     protected void buildSql() throws Exception{
-
+        build=true;
         List<ColumnClass> columnClasses = entityClass.getColumnClasses();
 
         this.sqlBuilder.append(INSERT).append(tableName).append("(");
@@ -45,24 +45,10 @@ public class InsertBuilder extends AbstractBuilder{
 
     }
 
-    @Override
-    public SQLObject getSQLObject() {
-        SQLObject sqlObject =new SQLObject();
-        try {
-            buildSql();
-        }catch (Exception e){
-            log.error("bulidSql fail Because of " + e.getMessage());
-            e.printStackTrace();
-
-            return null;
-        }
-        sqlObject.setObjects(sqlObjectList);
-        return sqlObject;
-    }
 
 
-    public InsertBuilder(Object object){
-        super(object);
+    public InsertBuilder(Object object,Class<T> tClass){
+        super(object,tClass);
 
     }
 }

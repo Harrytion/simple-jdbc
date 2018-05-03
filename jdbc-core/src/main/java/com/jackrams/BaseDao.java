@@ -3,11 +3,10 @@ package com.jackrams;
 import com.jackrams.domain.Example;
 import com.jackrams.domain.Page;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public interface BaseDao<T,Id extends Serializable> {
+public interface BaseDao<T> {
 
     /**
      *
@@ -34,10 +33,7 @@ public interface BaseDao<T,Id extends Serializable> {
      * @param ts
      * @return
      */
-    Integer insertList(Iterable<T> ts)throws Exception;
-
-
-    Integer insertListSelective(Iterable<T> ts)throws Exception;
+    Integer insertList(Collection<T> ts)throws Exception;
 
     /**
      *
@@ -77,21 +73,21 @@ public interface BaseDao<T,Id extends Serializable> {
      * @param t will delete Object Id
      * @return
      */
-    Integer delete(Id t)throws Exception;
+    Integer delete(Object t)throws Exception;
 
     /**
      *
      * @param ids will delete Object Of Ids
      * @return
      */
-    Integer deletes(Collection<Id> ids)throws Exception;
+    Integer deletes(Collection<Object> ids)throws Exception;
 
     /**
      *
      * @param ids
      * @return
      */
-    Integer deletes(Id ... ids)throws Exception;
+    Integer deletes(Object ... ids)throws Exception;
 
     /**
      * Query By Id
@@ -99,7 +95,7 @@ public interface BaseDao<T,Id extends Serializable> {
      * @return
      * 通过Id获取T实例
      */
-    T selectById(Id id)throws Exception;
+    T selectById(Object id)throws Exception;
 
     /**
      *
@@ -108,7 +104,7 @@ public interface BaseDao<T,Id extends Serializable> {
      *
      *
      */
-    List<T> selectByIds(Collection<Id> ids)throws Exception;
+    List<T> selectByIds(Collection<Object> ids)throws Exception;
 
     /**
      *
@@ -116,7 +112,7 @@ public interface BaseDao<T,Id extends Serializable> {
      * @return
      */
 
-    List<T> selectByIds(Id ... ids)throws Exception;
+    List<T> selectByIds(Object ... ids)throws Exception;
 
 
     /**
@@ -125,7 +121,7 @@ public interface BaseDao<T,Id extends Serializable> {
      * @return
      */
 
-    Page<T> selectPageByExample(Example example)throws Exception;
+    Page<T> selectPageByExample(Example example,int pageSize, int page)throws Exception;
 
     /**
      *
@@ -154,6 +150,6 @@ public interface BaseDao<T,Id extends Serializable> {
     Page<T> selectPageAllLikeAnd(T t,int pageSize,int page)throws Exception;
 
 
-    Class<? extends T> getDomainClass();
+    Class<T> getDomainClass();
 }
 

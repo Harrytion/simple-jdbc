@@ -8,17 +8,17 @@ import org.apache.commons.logging.LogFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsertSeletiveBuilder extends AbstractBuilder {
+public class InsertSeletiveBuilder<T> extends AbstractBuilder {
 
     private transient Log log =LogFactory.getLog(InsertSeletiveBuilder.class);
 
+
     @Override
-    public SQLObject getSQLObject() {
+    protected void buildSql() {
+        build=true;
         List<ColumnClass> columnClasses = entityClass.getColumnClasses();
         List<String> columnNames= new ArrayList<>();
-        this.sqlBuilder.append(INSERT).append(tableName).append("(");
-
-        //     List<String> fliedNameList = entityClass.getFliedNameList();
+        this.sqlBuilder.append(INSERT).append(tableName).append(_LEFT_SIGN);
 
         int columnSize = 0;
 
@@ -43,17 +43,11 @@ public class InsertSeletiveBuilder extends AbstractBuilder {
         sqlBuilder.append(VALUES);
 
         sqlBuilder.append(valueBuilder);
-        return null;
     }
 
-    @Override
-    protected void buildSql() {
+    public InsertSeletiveBuilder(Object object,Class<? extends T> clazz){
 
-    }
-
-    public InsertSeletiveBuilder(Object object){
-
-        super(object);
+        super(object,clazz);
 
     }
 }

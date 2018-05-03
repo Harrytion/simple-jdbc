@@ -1,19 +1,10 @@
 package com.jackrams.sql;
 
-import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.SQLObject;
 
-import java.util.List;
-
-public class UpdateBuilder<T> extends AbstractUpdateBuilder  {
+public class UpdateSelectiveBuilder<T> extends AbstractUpdateSelectiveBuilder {
 
 
-
-
-    public UpdateBuilder(Object object,Class<T> tClass) throws Exception{
-        super(object,tClass);
-        buildSql();
-    }
 
     @Override
     protected void buildSql() throws Exception{
@@ -22,4 +13,10 @@ public class UpdateBuilder<T> extends AbstractUpdateBuilder  {
         sqlBuilder.append(sqlObject.getSql());
         sqlObjectList.addAll(sqlObject.getObjects());
     }
+
+    public UpdateSelectiveBuilder(Object object, Class objClazz) {
+        super(object, objClazz);
+    }
+
+
 }
