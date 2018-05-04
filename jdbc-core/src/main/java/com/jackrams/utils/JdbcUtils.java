@@ -27,16 +27,7 @@ public abstract class JdbcUtils {
     /**
      * 加载DataSource
      */
-    static{
-        ServiceLoader<DataSourceLoader> dataSourceLoaders=ServiceLoader.load(DataSourceLoader.class);
-        Iterator<DataSourceLoader> iterator = dataSourceLoaders.iterator();
-        if(iterator.hasNext()){
-            DataSourceLoader dataSourceLoader = iterator.next();
-            if(dataSourceLoader instanceof DefaultDataSourceLoader)
-            iterator.next().setDataSource();
-        }
 
-    }
 
     public static Connection getConnection() throws SQLException{
 
