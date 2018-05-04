@@ -12,13 +12,8 @@ import java.util.List;
 public class SortTest {
     @Test
     public void test(){
-        List<Integer> list = Arrays.asList(1, 5,2 ,3 , 9,8);
-        List<Integer> integers=new ArrayList<>(list);
-        Collections.sort(integers);
-        System.out.println(list);
-        System.out.println(integers);
-        Integer[] arr=new Integer[10];
-        System.out.println((Object[] )arr);
+        boolean assignableFrom = AbstractBaseDaoImpl.class.isAssignableFrom(PersonDao.class);
+        System.out.println(assignableFrom);
     }
 
 

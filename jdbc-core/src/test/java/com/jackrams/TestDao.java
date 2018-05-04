@@ -8,6 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.UUID;
 
 public class TestDao {
@@ -25,7 +28,27 @@ public class TestDao {
         person.setImg(FileUtils.readFileToByteArray(new File("/home/hadoop/imgs.png")));
         person.setuId(UUID.randomUUID().toString().replaceAll("-",""));
         person.setUserName("我是姓名");
+
         new PersonDao().insert(person);
+
+    }
+
+    @Test
+    public void testGenType(){
+        Class<PersonDao> personDaoClass = PersonDao.class;
+        ParameterizedType genericSuperclass = (ParameterizedType)personDaoClass.getGenericSuperclass();
+        Type[] actualTypeArguments = genericSuperclass.getActualTypeArguments();
+        System.out.println(((Class)actualTypeArguments[0]).getPackage().getName());
+    }
+
+    @Test
+    public void testField() throws Exception{
+        PersonDao personDao = new PersonDao();
+        Class<AbstractBaseDaoImpl> personDaoClass = AbstractBaseDaoImpl.class;
+        Field domainClass = personDaoClass.getDeclaredField("domainClass");
+        domainClass.setAccessible(true);
+        domainClass.set(personDao,Person.class);
+        System.out.print(domainClass.get(personDao));
     }
 
 }

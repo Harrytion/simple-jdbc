@@ -150,7 +150,5 @@ public interface BaseDao<T> {
 
     Page<T> selectPageAllLikeAnd(T t,int pageSize,int page)throws Exception;
 
-
-    Class<T> getDomainClass();
 }
 

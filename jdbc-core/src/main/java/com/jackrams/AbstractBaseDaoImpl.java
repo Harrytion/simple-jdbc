@@ -19,7 +19,7 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
     @Override
     public Integer insert(T o) throws Exception{
         if(null!=o){
-            SQLBuilder sqlBuilder =new InsertBuilder(o,getDomainClass());
+            SQLBuilder sqlBuilder =new InsertBuilder(o,domainClass);
             SQLObject sqlObject = sqlBuilder.getSQLObject();
          return JdbcUtils.excuteUpdate(sqlObject);
 
@@ -165,9 +165,6 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
 
     private Class<T> domainClass;
 
-    public AbstractBaseDaoImpl() {
 
-        domainClass = getDomainClass();
-    }
 
 }
