@@ -192,7 +192,11 @@ public class Example{
     }
 
 
-
+    public Example end(){
+       this.criteriaList.add(this.criteria);
+       this.criteria=null;
+       return this;
+    }
 
 
     public static class Criteria {

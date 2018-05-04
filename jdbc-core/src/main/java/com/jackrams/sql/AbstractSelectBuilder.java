@@ -18,7 +18,7 @@ public abstract class AbstractSelectBuilder<T> implements SQLBuilder {
 
     protected String baseColumns ;
 
-    protected List<Object> sqlObjectArgs;
+    protected List<Object> sqlObjectArgs = new ArrayList<>();
 
     protected List<ColumnClass> columnClasses;
 

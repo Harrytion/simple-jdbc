@@ -88,9 +88,9 @@ public abstract class SQLUtils {
 
     public static ConcurrentMap<String,List<Object>> getSQLObjectMapFromExample(Example example){
         ConcurrentHashMap<String, List<Object>> stringObjectConcurrentHashMap = new ConcurrentHashMap<>();
+        StringBuilder sqlBuilder=new StringBuilder();
+        List<Object> objectList=new ArrayList<>();
         if(null!=example && example.getCriteriaList().size()>0) {
-            StringBuilder sqlBuilder=new StringBuilder();
-            List<Object> objectList=new ArrayList<>();
             final List<Example.Criteria> criteriaList = example.getCriteriaList();
             for (Example.Criteria criteria : criteriaList){
                 if(null==criteria.getAndOr()||StringUtils.isEmpty(criteria.getAndOr())){
@@ -138,36 +138,40 @@ public abstract class SQLUtils {
 
                 }
                 sqlBuilder.append(")");
-                if(example instanceof SelectExample) {
-                    SelectExample selectExample = (SelectExample) example;
-                    Integer page = selectExample.getPage();
-                    Integer pageSize = selectExample.getPageSize();
-                    List<String> descProperties = selectExample.getDescProperties();
-                    List<String> orderByProperties = selectExample.getOrderByProperties();
-                    if (orderByProperties.size() > 0) {
-                        sqlBuilder.append(" order by");
-                        for (String orderBy : orderByProperties){
-                            if(descProperties.contains(orderBy)){
-                                sqlBuilder.append(" ").append(orderBy).append(" desc,");
-                            }else {
-                                sqlBuilder.append(" ").append(orderBy).append(" asc ,");
-                            }
-                        }
-                        sqlBuilder=deleteChatAtLastIndex(sqlBuilder);
-                    }
 
-                    if(null!=pageSize&&0!=pageSize){
-                     if(null==page){
-                         page=1;
-                     }
-                     int start=(page-1)*pageSize;
-                     sqlBuilder.append(" limit ").append(start).append(",").append(pageSize);
+            }
+
+        }
+        if(example instanceof SelectExample) {
+            SelectExample selectExample = (SelectExample) example;
+            Integer page = selectExample.getPage();
+            Integer pageSize = selectExample.getPageSize();
+            List<String> descProperties = selectExample.getDescProperties();
+            List<String> orderByProperties = selectExample.getOrderByProperties();
+            if (orderByProperties.size() > 0) {
+                sqlBuilder.append(" order by");
+                for (String orderBy : orderByProperties){
+                    if(descProperties.contains(orderBy)){
+                        sqlBuilder.append(" ").append(orderBy).append(" desc,");
+                    }else {
+                        sqlBuilder.append(" ").append(orderBy).append(" asc ,");
                     }
                 }
+                sqlBuilder=deleteChatAtLastIndex(sqlBuilder);
+            }
 
-                stringObjectConcurrentHashMap.putIfAbsent(sqlBuilder.toString(),objectList);
+            if(null!=pageSize&&0!=pageSize){
+                if(null==page){
+                    page=1;
+                }
+                int start=(page-1)*pageSize;
+                sqlBuilder.append(" limit ?,?");
+                objectList.add(start);
+                objectList.add(pageSize);
             }
         }
+
+        stringObjectConcurrentHashMap.putIfAbsent(sqlBuilder.toString(),objectList);
         return stringObjectConcurrentHashMap;
     }
 

@@ -4,6 +4,7 @@ import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.Example;
 import com.jackrams.domain.SelectExample;
 import com.jackrams.utils.EntityUtils;
+import com.jackrams.utils.SQLUtils;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class ExampleHelper<T> {
         Example custom = Example.custom();
         for (ColumnClass columnClass : columnClasses){
             Object value = columnClass.getColumnField().get(t);
-            if(null !=value)custom.andLike(columnClass.getName(),value);
+            if(null !=value)custom.andLike(columnClass.getName(),SQLUtils.allLikeString(value.toString()));
 
         }
         return custom;

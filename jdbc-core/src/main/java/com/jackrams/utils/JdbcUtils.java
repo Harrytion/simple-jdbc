@@ -44,7 +44,7 @@ public abstract class JdbcUtils {
 
     public static Integer excuteUpdate(String sql, List<Object> objects) throws SQLException{
         if(showSql) {
-            log.info(sql);
+            log.debug(sql);
         }
         PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sql);
         int index=1;
@@ -83,7 +83,7 @@ public abstract class JdbcUtils {
 
     public static ResultSet queryForRowSet(SQLObject sqlObject) throws Exception {
         if(showSql){
-            log.debug(sqlObject.getSql());
+            log.info(sqlObject.getSql());
         }
         PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
         List<Object> objects = sqlObject.getObjects();

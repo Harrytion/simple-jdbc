@@ -16,7 +16,7 @@ public class SelectByExampleBuilder<T> extends AbstractSelectBuilder<T> {
     @Override
     protected void selectSql() throws Exception {
         buildedSelectSql=true;
-
+        if(this.example==null) return;
         SQLObject sqlObjectFromExample = null;
         if(example instanceof SelectExample){
             sqlObjectFromExample=SQLUtils.getSQLObjectFromSelectExample((SelectExample) example);
@@ -24,6 +24,7 @@ public class SelectByExampleBuilder<T> extends AbstractSelectBuilder<T> {
             sqlObjectFromExample=SQLUtils.getSQLObjectFromExample(example);
         }
         sqlBuilder.append(sqlObjectFromExample.getSql());
+
         sqlObjectArgs.addAll(sqlObjectFromExample.getObjects());
     }
 }
