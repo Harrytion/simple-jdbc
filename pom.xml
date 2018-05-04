@@ -7,12 +7,14 @@
     <groupId>com.jackrams</groupId>
     <artifactId>simple-jdbc</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>${main.version}</version>
     <modules>
         <module>jdbc-core</module>
+        <module>jdbc-spring</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <main.version>1.0-SNAPSHOT</main.version>
     </properties>
 
 
@@ -50,7 +52,9 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.45</version>
-            <scope>provided</scope>
+
+            <!--<scope>provided</scope>
+            -->
         </dependency>
 
 
