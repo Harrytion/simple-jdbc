@@ -5,6 +5,7 @@ import com.jackrams.domain.EntityClass;
 import com.jackrams.domain.SQLObject;
 import com.jackrams.excepts.BuilderException;
 import com.jackrams.utils.EntityUtils;
+import static com.jackrams.utils.SQLUtils.checkDbName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public abstract class  AbstractBuilder<T> implements SQLBuilder {
         this.entityClass = EntityUtils.getEntityClassMap().get(objClazz);
         if(null==this.entityClass) throw new BuilderException("can not find Annotation @Entity in "+objClazz.getName());
         this.dbName=this.entityClass.getSchema();
-        if(null!=dbName)
+        if(checkDbName(dbName))
         this.tableName=dbName+"."+this.entityClass.getTableName();
         else this.tableName=this.entityClass.getTableName();
 

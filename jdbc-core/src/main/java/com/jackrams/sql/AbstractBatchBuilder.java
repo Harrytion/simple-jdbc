@@ -4,6 +4,7 @@ import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
 import com.jackrams.domain.SQLObject;
 import com.jackrams.utils.EntityUtils;
+import static com.jackrams.utils.SQLUtils.checkDbName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public abstract class AbstractBatchBuilder<T> implements SQLBuilder {
         this.entityClass=EntityUtils.getEntityClassMap().get(objClazz);
         this.dbName=this.entityClass.getSchema();
         String tableName=this.entityClass.getTableName();
-        if(null != this.dbName && this.dbName.trim().length()>0){
+        if(checkDbName(dbName)){
             this.tableName=dbName+"."+tableName;
         }
         this.columnClasses=this.entityClass.getColumnClasses();

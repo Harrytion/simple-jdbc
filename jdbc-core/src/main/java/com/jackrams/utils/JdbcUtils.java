@@ -3,19 +3,20 @@ package com.jackrams.utils;
 import com.jackrams.domain.SQLObject;
 import com.jackrams.excepts.UtilsCannotInstanceException;
 import com.jackrams.helpper.CountHelper;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import static com.jackrams.contants.Constants.*;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ServiceLoader;
 
 public abstract class JdbcUtils {
     private static DataSource dataSource;
 
+    private static transient Log log = LogFactory.getLog(JdbcUtils.class);
 
     public static void setDataSource(DataSource dataSource) {
         if(dataSource==null){
@@ -42,6 +43,9 @@ public abstract class JdbcUtils {
 
 
     public static Integer excuteUpdate(String sql, List<Object> objects) throws SQLException{
+        if(showSql) {
+            log.info(sql);
+        }
         PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sql);
         int index=1;
         for (Object obj : objects){
@@ -56,6 +60,9 @@ public abstract class JdbcUtils {
 
     public static Integer excuteBatchUpdate(SQLObject sqlObject) throws Exception{
      //   Integer count=0;
+        if(showSql) {
+            log.debug(sqlObject.getSql());
+        }
         CountHelper countHelper =new CountHelper();
         PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
         List<List<Object>> batchArgs = sqlObject.getBatchArgs();
@@ -75,6 +82,9 @@ public abstract class JdbcUtils {
 
 
     public static ResultSet queryForRowSet(SQLObject sqlObject) throws Exception {
+        if(showSql){
+            log.debug(sqlObject.getSql());
+        }
         PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
         List<Object> objects = sqlObject.getObjects();
         int index = 1;

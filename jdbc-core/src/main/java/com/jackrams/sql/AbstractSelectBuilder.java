@@ -4,6 +4,7 @@ import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
 import com.jackrams.domain.SQLObject;
 import com.jackrams.utils.EntityUtils;
+import static com.jackrams.utils.SQLUtils.checkDbName;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public abstract class AbstractSelectBuilder<T> implements SQLBuilder {
         String dbName = entityClass.getSchema();
         String tableName  =entityClass.getTableName();
         this.tableName = tableName;
-        if(null!=dbName && dbName.trim().length()>0) {
+        if(checkDbName(dbName)) {
             this.tableName = dbName+"."+tableName;
         }
         initBaseColumn();

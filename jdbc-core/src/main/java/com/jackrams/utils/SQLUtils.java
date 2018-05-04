@@ -304,6 +304,11 @@ public abstract class SQLUtils {
 
     }
 
+    public static boolean checkDbName(String dbName){
+        return null!=dbName&&dbName.trim().length()>0;
+
+    }
+
 
     private static StringBuilder deleteChatAtLastIndex(StringBuilder sb){
         int index = sb.length() - 1;
