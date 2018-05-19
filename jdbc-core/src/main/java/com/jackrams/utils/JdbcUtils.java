@@ -66,12 +66,13 @@ public abstract class JdbcUtils {
 
     public static Integer excuteBatchUpdate(SQLObject sqlObject) throws Exception{
      //   Integer count=0;
-        if(showSql){
+      CountHelper countHelper =new CountHelper();
+      if(showSql){
           log.info(sqlObject.getSql());
         }
-
-        CountHelper countHelper =new CountHelper();
       Connection connection = dataSource.getConnection();
+      try {
+      connection.setAutoCommit(false);
       PreparedStatement preparedStatement = connection.prepareStatement(sqlObject.getSql());
         List<List<Object>> batchArgs = sqlObject.getBatchArgs();
         for (List<Object> args : batchArgs){
@@ -83,9 +84,18 @@ public abstract class JdbcUtils {
         }
 
         int[] batch = preparedStatement.executeBatch();
+        connection.commit();
         preparedStatement.close();
-        connection.close();
+
         countHelper.addArrayCount(batch);
+
+        }catch (Exception e){
+          throw e;
+        }finally {
+          connection.setAutoCommit(true);
+          connection.close();
+        }
+
         return countHelper.getCount();
     }
 

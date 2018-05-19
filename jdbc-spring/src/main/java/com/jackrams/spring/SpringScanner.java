@@ -1,14 +1,12 @@
 package com.jackrams.spring;
 
-import com.jackrams.AbstractBaseDaoImpl;
+import com.jackrams.AbstractDao;
 import com.jackrams.contants.Constants;
 import com.jackrams.scanner.AbstractScanner;
 import com.jackrams.utils.JdbcUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -19,17 +17,13 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SpringScanner extends AbstractScanner implements  BeanFactoryPostProcessor ,ApplicationContextAware {
+public class SpringScanner extends AbstractScanner implements ApplicationContextAware {
 
     private transient Log log = LogFactory.getLog(SpringScanner.class);
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
-
-    }
 
     private boolean checkIsAbstractDaoSubClass(Class beanClass){
 
-        return AbstractBaseDaoImpl.class.isAssignableFrom(beanClass);
+        return AbstractDao.class.isAssignableFrom(beanClass);
     }
 
     @Override
@@ -40,7 +34,7 @@ public class SpringScanner extends AbstractScanner implements  BeanFactoryPostPr
 
 
     private void setDomain(Object bean,Class domainClass) throws Exception{
-        Class<AbstractBaseDaoImpl> abstractBaseDaoClass = AbstractBaseDaoImpl.class;
+        Class<AbstractDao> abstractBaseDaoClass = AbstractDao.class;
         Field domainClassField = abstractBaseDaoClass.getDeclaredField("domainClass");
         domainClassField.setAccessible(true);
         domainClassField.set(bean,domainClass);
