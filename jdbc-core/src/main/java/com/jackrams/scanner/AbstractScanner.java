@@ -58,6 +58,7 @@ public abstract class AbstractScanner implements Scanner {
                 entityClass.setClassName(clazz.getName());
                 Table table = (Table) clazz.getAnnotation(Table.class);
                 entityClass.setTableName(table.name());
+               // log.info(entityClass.getTableName());
                 entityClass.setCatalog(table.catalog());
                 entityClass.setSchema(table.schema());
 

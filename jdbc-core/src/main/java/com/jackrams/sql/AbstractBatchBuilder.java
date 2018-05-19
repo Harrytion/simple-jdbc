@@ -4,12 +4,17 @@ import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.EntityClass;
 import com.jackrams.domain.SQLObject;
 import com.jackrams.utils.EntityUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import static com.jackrams.utils.SQLUtils.checkDbName;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBatchBuilder<T> implements SQLBuilder {
+
+    private transient Log log = LogFactory.getLog(getClass());
 
     protected boolean build=false;
 
@@ -38,9 +43,11 @@ public abstract class AbstractBatchBuilder<T> implements SQLBuilder {
         this.entityClass=EntityUtils.getEntityClassMap().get(objClazz);
         this.dbName=this.entityClass.getSchema();
         String tableName=this.entityClass.getTableName();
+        this.tableName = tableName;
         if(checkDbName(dbName)){
             this.tableName=dbName+"."+tableName;
         }
+      //  log.info("tableName" +":"+tableName+":"+this.tableName);
         this.columnClasses=this.entityClass.getColumnClasses();
         buildBaseColumns();
     }
@@ -63,5 +70,32 @@ public abstract class AbstractBatchBuilder<T> implements SQLBuilder {
         }
          baseColumnsBuilder = baseColumnsBuilder.deleteCharAt(baseColumnsBuilder.length() - 1);
         this.baseColumns=baseColumnsBuilder.toString();
+    }
+
+    protected StringBuilder getArgRep(int colSize){
+        StringBuilder sb =new StringBuilder();
+        for(int i=0;i<colSize;i++){
+            sb.append(ARG_RE).append(_COMMA);
+        }
+        sb=sb.deleteCharAt(sb.length()-1);
+        return  sb;
+    }
+
+    protected void bulidObjects() throws Exception {
+        for (Object o : objects) {
+            List<Object> objectList = new ArrayList<>();
+            for (ColumnClass columnClass : columnClasses) {
+                Object value = columnClass.getColumnField().get(o);
+                objectList.add(value);
+            }
+            batchArgList.add(objectList);
+        }
+    }
+
+    protected void append(){
+        this.sqlBuilder.append(tableName).append(_LEFT_SIGN).append(baseColumns).append(_RIGHT_SIGN).append(VALUES);
+        int colSize = this.columnClasses.size();
+        this.sqlBuilder.append(_LEFT_SIGN);
+        this.sqlBuilder.append(getArgRep(colSize)).append(_RIGHT_SIGN);
     }
 }

@@ -36,6 +36,7 @@ public interface BaseDao<T> {
      */
     Integer insertList(Collection<T> ts)throws Exception;
 
+    Integer replaceList(Collection<T> ts) throws Exception;
     /**
      *
      * @param t

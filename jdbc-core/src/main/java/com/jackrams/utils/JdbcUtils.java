@@ -5,13 +5,15 @@ import com.jackrams.excepts.UtilsCannotInstanceException;
 import com.jackrams.helpper.CountHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import static com.jackrams.contants.Constants.*;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import static com.jackrams.contants.Constants.showSql;
 
 public abstract class JdbcUtils {
     private static DataSource dataSource;
@@ -44,14 +46,18 @@ public abstract class JdbcUtils {
 
     public static Integer excuteUpdate(String sql, List<Object> objects) throws SQLException{
         if(showSql) {
-            log.debug(sql);
+            log.info(sql);
         }
-        PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sql);
+      Connection connection = dataSource.getConnection();
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
         int index=1;
         for (Object obj : objects){
             preparedStatement.setObject(index++,obj);
         }
-        return preparedStatement.executeUpdate();
+        int updateSize = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        connection.close();
+      return updateSize;
     }
 
     public static Integer excuteUpdate(SQLObject sqlObject) throws Exception{
@@ -60,11 +66,13 @@ public abstract class JdbcUtils {
 
     public static Integer excuteBatchUpdate(SQLObject sqlObject) throws Exception{
      //   Integer count=0;
-        if(showSql) {
-            log.debug(sqlObject.getSql());
+        if(showSql){
+          log.info(sqlObject.getSql());
         }
+
         CountHelper countHelper =new CountHelper();
-        PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
+      Connection connection = dataSource.getConnection();
+      PreparedStatement preparedStatement = connection.prepareStatement(sqlObject.getSql());
         List<List<Object>> batchArgs = sqlObject.getBatchArgs();
         for (List<Object> args : batchArgs){
             int index=1;
@@ -75,7 +83,8 @@ public abstract class JdbcUtils {
         }
 
         int[] batch = preparedStatement.executeBatch();
-
+        preparedStatement.close();
+        connection.close();
         countHelper.addArrayCount(batch);
         return countHelper.getCount();
     }
@@ -85,13 +94,19 @@ public abstract class JdbcUtils {
         if(showSql){
             log.info(sqlObject.getSql());
         }
-        PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sqlObject.getSql());
+      Connection connection = dataSource.getConnection();
+      PreparedStatement preparedStatement = connection.prepareStatement(sqlObject.getSql());
         List<Object> objects = sqlObject.getObjects();
         int index = 1;
         for(Object obj : objects){
             preparedStatement.setObject(index++,obj);
         }
-        return preparedStatement.executeQuery();
+      ResultSet resultSet = preparedStatement.executeQuery();
+      preparedStatement.close();
+      connection.close();
+
+
+      return resultSet;
     }
 
 

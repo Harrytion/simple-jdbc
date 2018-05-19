@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
+public  abstract class AbstractDao<T> implements BaseDao<T> {
     @Override
     public Integer insert(T o) throws Exception{
         if(null!=o){
@@ -50,7 +50,17 @@ public  abstract class AbstractBaseDaoImpl<T> implements BaseDao<T> {
         return 0;
     }
 
-
+    @Override
+    public Integer replaceList(Collection<T> ts) throws Exception {
+        if (null != ts) {
+            ReplaceBatchBuilder<T> tInsertBatchBuilder = new ReplaceBatchBuilder<>(new ArrayList<>(ts), domainClass);
+            SQLObject sqlObject = tInsertBatchBuilder.getSQLObject();
+            int count = JdbcUtils.excuteBatchUpdate(sqlObject);
+            if (count < 0) count = Math.abs(count) / 2;
+            return count;
+        }
+        return 0;
+    }
     @Override
     public Integer update(T o)throws Exception {
         return JdbcUtils.excuteUpdate(new UpdateBuilder(o,domainClass).getSQLObject());

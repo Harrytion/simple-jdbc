@@ -5,6 +5,7 @@ import com.jackrams.domain.SQLObject;
 public interface SQLBuilder {
     String ARG_RE = "?";
     String INSERT = " INSERT INTO ";
+    String REPLACE = " REPLACE INTO ";
     String UPDATE = " UPDATE ";
     String SET = " SET ";
     String VALUES = " VALUES ";

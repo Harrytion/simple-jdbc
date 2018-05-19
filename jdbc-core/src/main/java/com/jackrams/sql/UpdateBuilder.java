@@ -1,9 +1,6 @@
 package com.jackrams.sql;
 
-import com.jackrams.domain.ColumnClass;
 import com.jackrams.domain.SQLObject;
-
-import java.util.List;
 
 public class UpdateBuilder<T> extends AbstractUpdateBuilder  {
 
