@@ -79,6 +79,7 @@ public abstract class AbstractSelectBuilder<T> implements SQLBuilder {
             }
             tList.add(newInstance);
         }
+        resultSet.close();
         return tList;
     }
 

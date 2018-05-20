@@ -175,6 +175,7 @@ public  abstract class AbstractDao<T> implements BaseDao<T> {
 
     private Class<T> domainClass;
 
-
-
+    public void setDomainClass(Class<T> domainClass) {
+        this.domainClass = domainClass;
+    }
 }
